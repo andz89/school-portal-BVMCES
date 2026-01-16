@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "../../../utils/supabase/server";
-
 import { revalidatePath } from "next/cache";
 
 export async function createMPS(formData) {
@@ -31,11 +30,13 @@ export async function createOrUpdateMPSData(formData) {
   const mps_description_id = formData.get("mps_description_id");
   const grade_level = formData.get("grade_level").toLowerCase();
   const section = formData.get("section").toLowerCase();
-
+  const quarter = formData.get("quarter").toLowerCase();
+  const link = formData.get("link");
   const payload = {
     mps_description_id,
     grade_level,
     section,
+    quarter,
     gmrc: formData.get("gmrc") || 0,
     epp: formData.get("epp") || 0,
     filipino: formData.get("filipino") || 0,
@@ -45,7 +46,7 @@ export async function createOrUpdateMPSData(formData) {
     ap: formData.get("ap") || 0,
     mapeh: formData.get("mapeh") || 0,
     reading_literacy: formData.get("reading_literacy") || 0,
-    link: formData.get("link"),
+    link: link || null,
   };
 
   /* -----------------------------------
@@ -56,7 +57,8 @@ export async function createOrUpdateMPSData(formData) {
     .select("id")
     .eq("mps_description_id", mps_description_id)
     .eq("grade_level", grade_level)
-    .eq("section", section);
+    .eq("section", section)
+    .eq("quarter", quarter);
 
   // Exclude self when updating
   if (id) {

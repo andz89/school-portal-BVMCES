@@ -1,6 +1,6 @@
 import { createClient } from "../../../../utils/supabase/server";
 import { notFound } from "next/navigation";
-import AddMPSDataModal from "./AddMPSDataModal";
+import { checkRole } from "../../../../utils/lib/checkRole";
 import MPSClientTable from "./MPSClientTable";
 export default async function Page({ params }) {
   const supabase = await createClient();
@@ -20,6 +20,7 @@ export default async function Page({ params }) {
       id,
       grade_level,
       section,
+      quarter,
       gmrc,
       epp,
       filipino,
@@ -29,21 +30,27 @@ export default async function Page({ params }) {
       ap,
       mapeh,
       reading_literacy,
+      link,
       created_at
     `
     )
     .eq("mps_description_id", mps.id)
     .order("created_at", { ascending: false });
+  const profile = await checkRole();
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 ">
       <div>
         <h1 className="text-xl font-semibold">MPS – {mps.school_year}</h1>
         <p className="text-sm text-gray-500">
           Created on {new Date(mps.created_at).toLocaleDateString()}
         </p>
       </div>
-      <MPSClientTable mpsId={mps.id} mpsData={mpsData ?? []} />
+      <MPSClientTable
+        profile={profile}
+        mpsId={mps.id}
+        mpsData={mpsData ?? []}
+      />
     </div>
   );
 }

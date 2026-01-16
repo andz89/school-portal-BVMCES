@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./(pages)/component/header.jsx";
+import Navbar from "./components/header";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Navbar />
         {children}
         <footer className="mt-5 bg-gray-200 p-4 w-full row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
           B. Vasquez Memorial Central Elementary School All rights reserved.

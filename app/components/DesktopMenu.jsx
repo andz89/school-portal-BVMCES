@@ -1,36 +1,32 @@
 import Link from "next/link";
-import { logout } from "../../auth/actions";
-import { createClient } from "../../../utils/supabase/server";
-import { checkRole } from "../../../utils/lib/checkRole";
+import { logout } from "../auth/actions";
+import { createClient } from "../../utils/supabase/server";
 
 export default async function DesktopMenu() {
-  // const supabase = await createClient();
+  const supabase = await createClient();
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let isAdmin = false;
   let isEditor = false;
 
-  // if (user) {
-  //   const { data: profile } = await supabase
-  //     .from("users")
-  //     .select("role")
-  //     .eq("id", user.id)
-  //     .single();
+  if (user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
 
-  //   isAdmin = profile?.role === "admin";
-  //   isEditor = profile?.role === "editor";
-  // }
-  // if (!user) return null;
+    isAdmin = profile?.role === "admin";
+    isEditor = profile?.role === "editor";
+  }
+  if (!user) return null;
 
-  const profile = await checkRole();
-  isAdmin = profile?.role === "admin";
-  isEditor = profile?.role === "editor";
   return (
     <>
-      <div className="hidden  md:flex    gap-8  ">
+      <div className="hidden  md:flex    gap-8  justify-left   w-full">
         <Link href="/access" className="text-gray-700 hover:text-blue-700">
           Access
         </Link>
@@ -47,25 +43,25 @@ export default async function DesktopMenu() {
 
           <div className="absolute left-0 top-full z-50 hidden w-48 border bg-white shadow-md group-hover:block">
             <Link
-              href="/quality/mps"
+              href="/mps"
               className="block px-4 py-2 text-sm hover:bg-gray-100"
             >
               MPS
             </Link>
             <Link
-              href="/quality/gpa"
+              href="etraced/gpa"
               className="block px-4 py-2 text-sm hover:bg-gray-100"
             >
               GPA
             </Link>
             <Link
-              href="/quality/diagnostic"
+              href="etraced/diagnostic"
               className="block px-4 py-2 text-sm hover:bg-gray-100"
             >
               Diagnostic
             </Link>
             <Link
-              href="/quality/rna"
+              href="etraced/rma"
               className="block px-4 py-2 text-sm hover:bg-gray-100"
             >
               RMA
@@ -90,23 +86,13 @@ export default async function DesktopMenu() {
       </div>
 
       <div className="hidden md:flex items-center gap-4">
-        {isEditor && (
-          <div>
-            <Link
-              href="/user-dashboard"
-              className="text-gray-700 bg-slate-900 p-3 rounded-sm text-white"
-            >
-              Dashboard
-            </Link>
-          </div>
-        )}
         {isAdmin && (
           <div>
-            <Link
-              href="/admin-dashboard"
-              className="text-white bg-slate-900 p-3 rounded-sm"
-            >
-              Administration
+            <Link href="/users" className="text-blue-600   p-3  ">
+              Users
+            </Link>
+            <Link href="/classes" className="text-blue-600   p-3  ">
+              Classes
             </Link>
           </div>
         )}

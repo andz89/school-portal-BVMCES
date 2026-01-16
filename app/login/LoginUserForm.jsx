@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 import Image from "next/image";
-import { login } from "../../auth/actions";
+import { login } from "../auth/actions";
 const LoginUserForm = () => {
   const [error, setError] = useState("");
   const handleSignUpFormData = async (formData) => {
