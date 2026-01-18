@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { logout } from "../auth/actions";
-import { createClient } from "../../utils/supabase/server";
+import { logout } from "../../auth/actions";
+import { createClient } from "../../../utils/supabase/server";
 
 export default async function DesktopMenu() {
   const supabase = await createClient();
@@ -84,15 +84,14 @@ export default async function DesktopMenu() {
         </Link>
         {/* ✅ Admin-only menu item */}
       </div>
-
+      <Link href="/dashboard" className="text-blue-600   p-3  ">
+        Dashboard
+      </Link>
       <div className="hidden md:flex items-center gap-4">
         {isAdmin && (
           <div>
             <Link href="/users" className="text-blue-600   p-3  ">
               Users
-            </Link>
-            <Link href="/classes" className="text-blue-600   p-3  ">
-              Classes
             </Link>
           </div>
         )}

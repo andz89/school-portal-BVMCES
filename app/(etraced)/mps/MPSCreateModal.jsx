@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { createMPS } from "./actions";
 
 export default function MPSCreateModal() {
   const [open, setOpen] = useState(false);

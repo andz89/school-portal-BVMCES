@@ -11,10 +11,12 @@ export async function checkRole(requiredRole = "admin") {
   if (user) {
     const { data: profile, error } = await supabase
       .from("users")
-      .select("role ,grade")
+      .select("*")
       .eq("id", user.id)
       .single();
 
     return profile;
+  } else {
+    redirect("/login");
   }
 }

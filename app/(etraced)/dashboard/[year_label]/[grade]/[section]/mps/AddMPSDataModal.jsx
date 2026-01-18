@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createMPSData } from "../actions";
-import { createOrUpdateMPSData } from "../actions";
+import { createMPSData } from "./actions";
+import { createOrUpdateMPSData } from "./actions";
 
 export default function AddMPSDataModal({
+  section,
+  grade,
+  year_label,
   profile,
-  mpsId,
+  classID,
   editingData,
   onClose,
 }) {
@@ -37,7 +40,7 @@ export default function AddMPSDataModal({
           onClick={() => setOpen(true)}
           className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"
         >
-          Add Class
+          Add MPS Record
         </button>
       )}
 
@@ -47,7 +50,9 @@ export default function AddMPSDataModal({
             <h2 className="text-lg font-semibold">Add Class</h2>
 
             <form action={handleSubmit} className="space-y-3">
-              <input type="hidden" name="mps_description_id" value={mpsId} />
+              <input type="hidden" name="class_id" value={classID} />
+              <input type="hidden" name="year_label" value={year_label} />
+
               <div
                 className={`flex flex-col gap-1 ${
                   profile.role !== "admin"
@@ -58,31 +63,13 @@ export default function AddMPSDataModal({
                 <label className="text-xs font-medium text-gray-600">
                   Grade
                 </label>{" "}
-                <select
-                  disabled={profile.role !== "admin" ? true : false}
-                  name="grade_level"
-                  defaultValue={
-                    editingData?.grade_level
-                      ? `Grade ${editingData.grade_level.replace(
-                          /[^0-9]/g,
-                          ""
-                        )}`
-                      : ""
-                  }
-                  required
+                <input
+                  readOnly
+                  name={"grade_level"}
+                  defaultValue={grade.toUpperCase().replace("-", " ")}
+                  type="text"
                   className={inputClass}
-                >
-                  <option value="" disabled>
-                    Select Grade
-                  </option>
-
-                  <option value="Grade 1">Grade 1</option>
-                  <option value="Grade 2">Grade 2</option>
-                  <option value="Grade 3">Grade 3</option>
-                  <option value="Grade 4">Grade 4</option>
-                  <option value="Grade 5">Grade 5</option>
-                  <option value="Grade 6">Grade 6</option>
-                </select>
+                />
               </div>
 
               <div
@@ -96,8 +83,8 @@ export default function AddMPSDataModal({
                   Section
                 </label>
                 <input
-                  disabled={profile.role !== "admin" ? true : false}
-                  defaultValue={editingData?.section || ""}
+                  readOnly
+                  defaultValue={section || ""}
                   name="section"
                   placeholder="Section"
                   required
@@ -115,7 +102,7 @@ export default function AddMPSDataModal({
                   Quarter
                 </label>
                 <select
-                  disabled={profile.role !== "admin" ? true : false}
+                  readOnly={profile.role === "admin" ? false : true}
                   name="quarter"
                   defaultValue={
                     editingData?.quarter

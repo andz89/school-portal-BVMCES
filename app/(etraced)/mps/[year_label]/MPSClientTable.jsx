@@ -2,10 +2,8 @@
 
 import { useState, useMemo } from "react";
 
-import AddMPSDataModal from "./AddMPSDataModal";
-import { deleteMPSData } from "../actions";
 import QuarterTable from "./QuarterTable";
-export default function MPSClientTable({ profile, mpsId, mpsData }) {
+export default function MPSClientTable({ profile, mpsData }) {
   const [editingRow, setEditingRow] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [viewMode, setViewMode] = useState("quarter");
@@ -20,7 +18,7 @@ export default function MPSClientTable({ profile, mpsId, mpsData }) {
 
     try {
       setDeletingId(row.id);
-      await deleteMPSData(row.id, mpsId);
+      await deleteMPSData(row.id, mpsData.id);
     } catch (err) {
       alert(err.message);
     } finally {
@@ -52,11 +50,7 @@ export default function MPSClientTable({ profile, mpsId, mpsData }) {
         header: "Section",
         cell: ({ getValue }) => getValue().toUpperCase(),
       },
-      {
-        accessorKey: "quarter",
-        header: "Quarter",
-        cell: ({ getValue }) => getValue().toUpperCase(),
-      },
+
       { accessorKey: "gmrc", header: "GMRC" },
       { accessorKey: "epp", header: "EPP" },
       { accessorKey: "filipino", header: "Fil" },
@@ -93,47 +87,6 @@ export default function MPSClientTable({ profile, mpsId, mpsData }) {
           ) : (
             "-"
           ),
-      },
-
-      {
-        header: admin ? "Action" : " ",
-        cell: ({ row }) => (
-          <div className={`space-x-2  ${!admin && "hidden"}`}>
-            <button
-              disabled={
-                profile.role === "admin"
-                  ? false
-                  : profile.grade === row.original.grade_level
-                  ? false
-                  : true
-              }
-              onClick={() => setEditingRow(row.original)}
-              className={`px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200 ${
-                profile.role === "admin"
-                  ? ""
-                  : profile.grade !== row.original.grade_level
-                  ? "bg-gray-100 text-gray-400 hover:bg-gray-100 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              Edit
-            </button>
-            <button
-              disabled={profile.role == "admin" ? false : true}
-              onClick={() => handleDelete(row.original)}
-              // disabled={deletingId === row.original.id}
-              className={`px-2 py-1 text-xs rounded bg-red-100 text-red-700 hover:bg-red-200 disabled:opacity-50 ${
-                profile.role == "admin"
-                  ? false
-                  : true
-                  ? "bg-gray-100 text-gray-400 hover:bg-gray-100 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              {deletingId === row.original.id ? "Deleting..." : "Delete"}
-            </button>
-          </div>
-        ),
       },
     ],
     [deletingId]
@@ -267,13 +220,6 @@ export default function MPSClientTable({ profile, mpsId, mpsData }) {
 
   return (
     <>
-      <AddMPSDataModal
-        profile={profile}
-        mpsId={mpsId}
-        editingData={editingRow}
-        onClose={() => setEditingRow(null)}
-      />
-
       <div className="mb-4 flex gap-2">
         <button
           onClick={() => setViewMode("quarter")}

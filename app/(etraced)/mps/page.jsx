@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { createClient } from "../../../utils/supabase/server";
-import MPSCreateModal from "./MPSCreateModal";
-import { profile } from "console";
 
 export default async function Page() {
   const supabase = await createClient();
 
-  const { data: mpsList, error } = await supabase
-    .from("mps_descriptions")
-    .select("id, school_year, created_at")
+  const { data: school_year, error } = await supabase
+    .from("school_year")
+    .select("id,year_label,  created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -24,31 +22,35 @@ export default async function Page() {
         </p>
       </div>
 
-      {profile.role === "admin" && <MPSCreateModal />}
-
       {/* MPS List */}
       <div className="bg-white rounded  ">
         <div className=" flex gap-2 w-full flex-wrap  ">
-          {mpsList.length === 0 && (
+          {school_year.length === 0 && (
             <div className="p-4 text-center text-gray-500 border rounded bg-gray-50">
               No MPS records yet
             </div>
           )}
 
-          {mpsList.map((mps) => (
-            <div key={mps.id} className="w-[300px]">
-              <Link href={`/mps/${mps.id}`}>
+          {school_year.map((classData) => (
+            <div key={classData.id} className="w-[300px]">
+              <Link
+                href={{
+                  pathname: `/mps/${classData.year_label}`,
+                  query: { id: classData.id },
+                }}
+              >
                 <div
-                  key={mps.id}
+                  key={classData.id}
                   className="flex items-center justify-between border rounded p-4 bg-white hover:bg-gray-50 transition"
                 >
                   <div>
                     <div className="text-sm font-semibold text-blue-600  ">
-                      {mps.school_year}
+                      {classData.year_label}
                     </div>
 
                     <p className="text-xs text-gray-500 mt-1">
-                      Created: {new Date(mps.created_at).toLocaleDateString()}
+                      Created:{" "}
+                      {new Date(classData.created_at).toLocaleDateString()}
                     </p>
                   </div>
 

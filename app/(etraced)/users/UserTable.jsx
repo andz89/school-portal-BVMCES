@@ -41,7 +41,9 @@ export default function UserTable({ users }) {
                 <td className="px-3 py-2 truncate">{user.full_name}</td>
                 <td className="px-3 py-2 truncate">{user.email}</td>
                 <td className="px-3 py-2 capitalize">{user.role}</td>
-                <td className="px-3 py-2">{user.grade ?? "-"}</td>
+                <td className="px-3 py-2">
+                  {user.grade.trim().toUpperCase().replace("-", " ") ?? "-"}
+                </td>
                 <td className="px-3 py-2 text-right space-x-2">
                   <button
                     onClick={() => {

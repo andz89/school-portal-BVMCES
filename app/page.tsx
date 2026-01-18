@@ -3,22 +3,24 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../utils/supabase/server";
 import { checkRole } from "../utils/lib/checkRole";
-
+import DashboardHomePage from "./components/DashboardHomePage";
 import Image from "next/image";
 export default async function Page() {
-  // const supabase = await createClient();
-
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const supabase = await createClient();
+  let profile;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Logged-in users should not stay on public page
-  const profile = await checkRole();
+  if (user) {
+    profile = await checkRole();
+  }
 
   return (
     <>
       {profile ? (
-        <div>Loginned user</div>
+        <DashboardHomePage />
       ) : (
         <main className="min-h-screen flex items-center justify-center bg-gray-100">
           <div className="max-w-xl w-full bg-white p-8 rounded-lg shadow-md text-center">

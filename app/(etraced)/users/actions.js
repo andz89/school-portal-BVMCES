@@ -72,7 +72,7 @@ export async function createUser(form) {
     full_name: form.fullName,
     email: form.email,
     role: form.role,
-    grade: form.grade,
+    grade: form.grade.trim().toLowerCase().replace(" ", "-"),
   });
 
   if (profileError) {

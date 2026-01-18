@@ -109,12 +109,12 @@ export default function UserForm({ user, onClose }) {
           className="w-full border p-2 text-sm"
         >
           <option value="">Select grade</option>
-          <option value="grade 1">Grade 1</option>
-          <option value="grade 2">Grade 2</option>
-          <option value="grade 3">Grade 3</option>
-          <option value="grade 4">Grade 4</option>
-          <option value="grade 5">Grade 5</option>
-          <option value="grade 6">Grade 6</option>
+          <option value="grade-1">Grade 1</option>
+          <option value="grade-2">Grade 2</option>
+          <option value="grade-3">Grade 3</option>
+          <option value="grade-4">Grade 4</option>
+          <option value="grade-5">Grade 5</option>
+          <option value="grade-6">Grade 6</option>
           <option value="implementation">Implementation</option>
         </select>
       )}
